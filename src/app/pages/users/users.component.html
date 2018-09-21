@@ -1,0 +1,31 @@
+<div class="container">
+  <div class="category-table">
+    <table class="table table-striped">
+      <thead>
+        <tr>
+          <th scope="col">Name</th>
+          <th scope="col">Email</th>
+          <th scope="col">Role</th>
+          <th scope="col">Created</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let user of users | paginate: { itemsPerPage: 10, currentPage: p }">
+          <td>
+            {{user.name}}
+          </td>
+          <td>
+            {{user.email}}
+          </td>
+          <td>
+            {{user.user_type.role}}
+          </td>
+          <td>
+            {{showDate(user.created_at)}}
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <pagination-controls (pageChange)="p = $event"></pagination-controls>
+  </div>
+</div>

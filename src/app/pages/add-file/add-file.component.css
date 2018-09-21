@@ -1,0 +1,10 @@
+.add-file{
+    margin-top: 48px;
+    -webkit-box-shadow: 0px 0px 7px 1px rgba(0, 0, 0, 0.75);
+    -moz-box-shadow: 0px 0px 7px 1px rgba(0, 0, 0, 0.75);
+    box-shadow: 0px 0px 7px 1px rgba(0, 0, 0, 0.75);
+    padding: 40px;
+}
+.no-padding{
+    padding-left:0px !important;
+}

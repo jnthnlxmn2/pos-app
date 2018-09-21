@@ -1,0 +1,29 @@
+.container.login {
+    margin-top: 120px;
+}
+
+h4.panel-title.login {
+    text-align: center;
+}
+
+.login-margin {
+    -webkit-box-shadow: 0px 0px 7px 1px rgba(0, 0, 0, 0.75);
+    -moz-box-shadow: 0px 0px 7px 1px rgba(0, 0, 0, 0.75);
+    box-shadow: 0px 0px 7px 1px rgba(0, 0, 0, 0.75);
+    padding: 28px;
+}
+
+.login-margin input, .login-margin input[type=submit] {
+    width: 90%;
+    margin: 0 auto;
+}
+.alert.alert-danger.login {
+    width: 90%;
+    margin: 0 auto;
+}
+
+@media (min-width: 794px) {
+    .container {
+        max-width: 519px;
+    }
+}

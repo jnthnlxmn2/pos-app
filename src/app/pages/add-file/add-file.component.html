@@ -1,0 +1,64 @@
+<div class="container">
+  <div class="add-file">
+    <div class="row">
+      <div class="col-md-6 no-padding">
+        <div class="input-group  mb-3">
+          <div class="input-group-prepend">
+            <span class="input-group-text" id="inputGroup-sizing-sm">Name</span>
+          </div>
+          <input type="text"  [(ngModel)]="name" required  class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm">
+        </div>
+      </div>
+      <div class="col-md-6 no-padding">
+        <div class="input-group   mb-3">
+          <div class="input-group-prepend">
+            <label class="input-group-text" for="inputGroupSelect01">Options</label>
+          </div>
+          <select class="custom-select" required [(ngModel)]="selectedCategory" id="inputGroupSelect01">
+            <option selected>Choose...</option>
+            <option *ngFor="let category of file_category" value="{{category.id}}">{{category.description}}</option>
+          </select>
+        </div>
+      </div>
+      <div class="clo-md-6">
+        <div class="input-group mb-3">
+            <table class="table">
+                <tbody>
+                  <tr *ngFor="let item of uploader.queue">
+                    <td>
+                      <strong>{{ item?.file?.name }}</strong>
+                    </td>
+                    <td class="text-center">
+                      <span *ngIf="item.isSuccess">
+                        <i class="glyphicon glyphicon-ok"></i>
+                      </span>
+                      <span *ngIf="item.isCancel">
+                        <i class="glyphicon glyphicon-ban-circle"></i>
+                      </span>
+                      <span *ngIf="item.isError">
+                        <i class="glyphicon glyphicon-remove"></i>
+                      </span>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+          <div *ngIf="!uploader.queue.length>0"  class="input-group-prepend">
+            <span class="input-group-text" id="inputGroupFileAddon01">Upload</span>
+          </div>
+          <div *ngIf="!uploader.queue.length>0" class="custom-file">
+            <input type="file"  ng2FileSelect  [uploader]="uploader"  class="custom-file-input" id="inputGroupFile01" aria-describedby="inputGroupFileAddon01">
+            <label class="custom-file-label" *ngIf="!editBolean"  for="inputGroupFile01">Choose file</label>
+            <label class="custom-file-label" *ngIf="editBolean"  for="inputGroupFile01">Change file</label>
+          </div>
+          <progress-bar [percent]="uploader.progress" theme="success"></progress-bar>
+        </div>
+      </div>
+      <div class="clo-md-6">
+      </div>
+    </div>
+    <div class="btn-group" style="float: right;" role="group" aria-label="Basic example">
+        <button type="button" *ngIf="!editBolean" (click)="addFile()" class="btn btn-success">upload</button>
+        <button type="button" *ngIf="editBolean" (click)="editFile()" class="btn btn-success">update</button>
+      </div>
+  </div>
+</div>

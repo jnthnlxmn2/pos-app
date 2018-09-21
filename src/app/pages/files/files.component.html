@@ -1,0 +1,97 @@
+<div class="container">
+  <div *ngIf="me.user_type">
+    <div *ngIf="me.user_type.role=='Admin'">
+      <div class="file-table" *ngIf="files.length>0">
+        <table class="table table-striped">
+          <thead>
+            <tr>
+              <th scope="col">User</th>
+              <th scope="col">Name</th>
+              <th scope="col">Category</th>
+              <th scope="col">Type</th>
+              <th scope="col">Created</th>
+              <th scope="col">Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let file of files | paginate: { itemsPerPage: 10, currentPage: p }">
+              <td>
+                {{file.user.name}}
+              </td>
+              <td>
+                {{file.name}}
+              </td>
+              <td>
+                {{file.file_category_type.name}}
+              </td>
+              <td>
+                {{file.type}}
+              </td>
+              <td>
+                {{showDate(file.created_at)}}
+              </td>
+              <td>
+                <button class="btn btn-warning" (click)="edit(file)"> Edit </button>
+                <a *ngIf="file.type == 'image' || file.type == 'pdf' " href="{{file.file_path+'?access_token='+access_token}}" target="_blank">
+                  <button class="btn btn-info">View</button>
+                </a>
+                <a *ngIf="file.type == 'file'" href="{{file.file_path+'/download?access_token='+access_token}}" target="_blank">
+                  <button class="btn btn-info">View</button>
+                </a>
+                <a href="{{file.file_path+'/download?access_token='+access_token}}" target="_blank">
+                  <button class="btn btn-success">Download</button>
+                </a>
+                <button (click)="delete(file.id)" class="btn btn-danger">Delete</button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+        <pagination-controls (pageChange)="p = $event"></pagination-controls>
+      </div>
+    </div>
+
+    <div *ngIf="me.user_type.role!='Admin'">
+      <div class="file-table" *ngIf="files.length>0">
+        <table class="table table-striped">
+          <thead>
+            <tr>
+              <th scope="col">Name</th>
+              <th scope="col">Category</th>
+              <th scope="col">Type</th>
+              <th scope="col">Created</th>
+              <th scope="col">Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let file of files | paginate: { itemsPerPage: 10, currentPage: p }">
+              <td>
+                {{file.name}}
+              </td>
+              <td>
+                {{file.file_category_type.name}}
+              </td>
+              <td>
+                {{file.type}}
+              </td>
+              <td>
+                {{showDate(file.created_at)}}
+              </td>
+              <td>
+                <a *ngIf="file.type == 'image' || file.type == 'pdf' " href="{{file.file_path+'?access_token='+access_token}}" target="_blank">
+                  <button class="btn btn-info">View</button>
+                </a>
+                <a *ngIf="file.type == 'file'" href="{{file.file_path+'/download?access_token='+access_token}}" target="_blank">
+                  <button class="btn btn-info">View</button>
+                </a>
+                <a href="{{file.file_path+'/download?access_token='+access_token}}" target="_blank">
+                  <button class="btn btn-success">Download</button>
+                </a>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+        <pagination-controls (pageChange)="p = $event"></pagination-controls>
+      </div>
+    </div>
+  </div>
+</div>

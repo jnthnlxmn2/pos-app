@@ -1,0 +1,41 @@
+import { Component, OnInit } from '@angular/core';
+import { AuthService } from '../services/auth.service';
+import { Router } from '@angular/router';
+import { LocalStorageService } from 'ngx-webstorage';
+import { UserService } from '../services/user.service';
+@Component({
+  selector: 'app-header',
+  templateUrl: './header.component.html',
+  styleUrls: ['./header.component.css']
+})
+
+export class HeaderComponent implements OnInit {
+  public paths = [{ name: 'Files', path: 'files' }, { name: 'Add file', path: 'add-file' }];
+  constructor(public authservice: AuthService, public router: Router, public storage: LocalStorageService, public userservice: UserService) {
+    this.userservice.getMe().then(response => {
+      let data: any = response;
+      if (data.data) {
+        if (data.data.user_type_id == 1) {
+          this.paths = [{ name: 'Files', path: 'files' }, { name: 'Add file', path: 'add-file' }, { name: 'Categories', path: 'categories' }, { name: 'Register', path: 'register' }, { name: 'Users', path: 'users' }];
+        } else {
+          this.paths = [{ name: 'Files', path: 'files' }, { name: 'Add file', path: 'add-file' }];
+        }
+      }
+    })
+  }
+
+  ngOnInit() {
+    console.log("test")
+  }
+  navigate(path) {
+    this.router.navigate(['/' + path]);
+  }
+  logout() {
+    this.authservice.logout();
+    this.router.navigate(["/login"])
+  }
+  changepassword(){
+    this.router.navigate(["/change-password"])
+  }
+
+}

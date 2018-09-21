@@ -1,0 +1,50 @@
+.progress {
+    display: block;
+    padding: 0;
+    margin: 5px 0;
+    width: 100%;
+    overflow: hidden;
+    border-radius: 2px;
+    .progress-bar {
+        border-radius: 2px;
+    }
+}
+
+.progress-sm {
+    .progress {
+        height: 4px;
+        .progress-bar {
+            height: 4px;
+        }
+    }
+    .progress-percent {
+        padding: 0 .2em;
+        display: inline-block;
+        position: relative;
+        width: auto;
+        height: auto;
+        border-radius: 2px;
+        &:after {
+            display: block;
+            content: '';
+            position: absolute;
+            bottom: -4px;
+            left: 45%;
+            width: 4px;
+            height: 4px;
+            transform: rotate(45deg) translate(-50%, 0);
+        }
+    }
+}
+
+.progress-lg {
+    .progress {
+        height: 20px;
+        .progress-bar {
+            height: 20px;
+        }
+    }
+    .progress-percent {
+        font-weight: 700;
+    }
+}
