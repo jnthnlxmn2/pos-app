@@ -1,5 +1,11 @@
 <div class="container">
   <div *ngIf="me.user_type">
+    <div class="input-group  mb-3">
+      <div class="input-group-prepend">
+        <span class="input-group-text" id="inputGroup-sizing-sm">Search</span>
+      </div>
+      <input type="text" [(ngModel)]="search" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm">
+    </div>
     <div *ngIf="me.user_type.role=='Admin'">
       <div class="file-table" *ngIf="files.length>0">
         <table class="table table-striped">
@@ -14,7 +20,7 @@
             </tr>
           </thead>
           <tbody>
-            <tr *ngFor="let file of files | paginate: { itemsPerPage: 10, currentPage: p }">
+            <tr *ngFor="let file of files  | paginate: { itemsPerPage: 10, currentPage: p } | searchpipe:search">
               <td>
                 {{file.user.name}}
               </td>

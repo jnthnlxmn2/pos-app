@@ -23,6 +23,7 @@ import { UsersComponent } from './pages/users/users.component';
 import { ModalModule } from 'ngx-modal';
 import { RegisterComponent } from './pages/register/register.component';
 import { ChangePasswordComponent } from './pages/change-password/change-password.component';
+import { SearchpipePipe } from './pipes/searchpipe.pipe';
 
 @NgModule({
   declarations: [
@@ -37,7 +38,8 @@ import { ChangePasswordComponent } from './pages/change-password/change-password
     FileCategoryComponent,
     UsersComponent,
     RegisterComponent,
-    ChangePasswordComponent
+    ChangePasswordComponent,
+    SearchpipePipe
 
   ],
   imports: [

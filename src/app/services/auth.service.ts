@@ -51,6 +51,7 @@ export class AuthService {
               if (data.data) {
                 this.me = data.data;
                 console.log(this.me)
+                location.reload();
               }
             })
           }

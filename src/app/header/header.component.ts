@@ -10,6 +10,7 @@ import { UserService } from '../services/user.service';
 })
 
 export class HeaderComponent implements OnInit {
+  collapsed = true;
   public paths = [{ name: 'Files', path: 'files' }, { name: 'Add file', path: 'add-file' }];
   constructor(public authservice: AuthService, public router: Router, public storage: LocalStorageService, public userservice: UserService) {
     this.userservice.getMe().then(response => {
@@ -24,6 +25,11 @@ export class HeaderComponent implements OnInit {
     })
   }
 
+
+  toggleCollapsed(): void {
+    this.collapsed = !this.collapsed;
+  }
+
   ngOnInit() {
     console.log("test")
   }
@@ -34,7 +40,7 @@ export class HeaderComponent implements OnInit {
     this.authservice.logout();
     this.router.navigate(["/login"])
   }
-  changepassword(){
+  changepassword() {
     this.router.navigate(["/change-password"])
   }
 
