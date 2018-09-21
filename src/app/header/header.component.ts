@@ -11,15 +11,27 @@ import { UserService } from '../services/user.service';
 
 export class HeaderComponent implements OnInit {
   collapsed = true;
+  isMobile = false;
   public paths = [{ name: 'Files', path: 'files' }, { name: 'Add file', path: 'add-file' }];
   constructor(public authservice: AuthService, public router: Router, public storage: LocalStorageService, public userservice: UserService) {
     this.userservice.getMe().then(response => {
       let data: any = response;
       if (data.data) {
-        if (data.data.user_type_id == 1) {
-          this.paths = [{ name: 'Files', path: 'files' }, { name: 'Add file', path: 'add-file' }, { name: 'Categories', path: 'categories' }, { name: 'Register', path: 'register' }, { name: 'Users', path: 'users' }];
-        } else {
-          this.paths = [{ name: 'Files', path: 'files' }, { name: 'Add file', path: 'add-file' }];
+        if (typeof window.orientation !== 'undefined') {
+          if (data.data.user_type_id == 1) {
+            this.paths = [{ name: 'Files', path: 'files' }, { name: 'Users', path: 'users' }];
+          } else {
+            this.paths = [{ name: 'Files', path: 'files' }];
+          }
+        }
+        else {
+
+          if (data.data.user_type_id == 1) {
+            this.paths = [{ name: 'Files', path: 'files' }, { name: 'Add file', path: 'add-file' }, { name: 'Categories', path: 'categories' }, { name: 'Register', path: 'register' }, { name: 'Users', path: 'users' }];
+          } else {
+            this.paths = [{ name: 'Files', path: 'files' }, { name: 'Add file', path: 'add-file' }];
+          }
+
         }
       }
     })
@@ -32,6 +44,12 @@ export class HeaderComponent implements OnInit {
 
   ngOnInit() {
     console.log("test")
+    if (typeof window.orientation !== 'undefined') {
+      this.isMobile = true;
+      console.log(this.isMobile, "US")
+    }
+
+
   }
   navigate(path) {
     this.router.navigate(['/' + path]);

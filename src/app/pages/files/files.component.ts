@@ -21,12 +21,16 @@ export class FilesComponent implements OnInit {
   p: number = 1;
   api: any = '';
   me: any = {};
+  isMobile = false;
   collection: any[] = this.files;
   constructor(public routeparams: ActivatedRoute, public fileservice: FileService,
     public storage: LocalStorageService, public globalservice: GlobalService,
     private spinner: NgxSpinnerService, public userservice: UserService, public router: Router) { }
 
   ngOnInit() {
+    if (typeof window.orientation !== 'undefined') {
+      this.isMobile = true;
+    }
     this.userservice.getMe().then(response => {
       let data: any = response;
       if (data.data) {
@@ -92,7 +96,7 @@ export class FilesComponent implements OnInit {
     })
   }
   edit(file) {
-    this.router.navigate(["/add-file",file])
+    this.router.navigate(["/add-file", file])
   }
 
 }

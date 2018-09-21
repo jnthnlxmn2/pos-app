@@ -1,13 +1,13 @@
 <div class="container">
   <div *ngIf="me.user_type">
-    <div class="input-group  mb-3">
-      <div class="input-group-prepend">
-        <span class="input-group-text" id="inputGroup-sizing-sm">Search</span>
-      </div>
-      <input type="text" [(ngModel)]="search" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm">
-    </div>
     <div *ngIf="me.user_type.role=='Admin'">
-      <div class="file-table" *ngIf="files.length>0">
+      <div class="input-group  mb-3">
+        <div class="input-group-prepend">
+          <span class="input-group-text" id="inputGroup-sizing-sm">Search</span>
+        </div>
+        <input type="text" [(ngModel)]="search" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm">
+      </div>
+      <div class="file-table table-responsive" *ngIf="files.length>0">
         <table class="table table-striped">
           <thead>
             <tr>
@@ -47,7 +47,7 @@
                 <a href="{{file.file_path+'/download?access_token='+access_token}}" target="_blank">
                   <button class="btn btn-success">Download</button>
                 </a>
-                <button (click)="delete(file.id)" class="btn btn-danger">Delete</button>
+                <button (click)="delete(file.id)" *ngIf="!isMobile" class="btn btn-danger">Delete</button>
               </td>
             </tr>
           </tbody>
@@ -57,7 +57,13 @@
     </div>
 
     <div *ngIf="me.user_type.role!='Admin'">
-      <div class="file-table" *ngIf="files.length>0">
+      <div class="input-group  mb-3">
+        <div class="input-group-prepend">
+          <span class="input-group-text" id="inputGroup-sizing-sm">Search</span>
+        </div>
+        <input type="text" [(ngModel)]="search" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm">
+      </div>
+      <div class="file-table table-responsive" *ngIf="files.length>0">
         <table class="table table-striped">
           <thead>
             <tr>
