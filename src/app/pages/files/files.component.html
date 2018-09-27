@@ -1,4 +1,7 @@
 <div class="container">
+  <div class="logo-center">
+    <img src="../../../assets/LOGO.jpg" class="logo">
+  </div>
   <div *ngIf="me.user_type">
     <div *ngIf="me.user_type.role=='Admin'">
       <div class="input-group  mb-3">
@@ -7,7 +10,7 @@
         </div>
         <input type="text" [(ngModel)]="search" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm">
       </div>
-      <div class="file-table table-responsive" *ngIf="files.length>0">
+      <div class="file-table table-responsive" style="background: white" *ngIf="files.length>0">
         <table class="table table-striped">
           <thead>
             <tr>
