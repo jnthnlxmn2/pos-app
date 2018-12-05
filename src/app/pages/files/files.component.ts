@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FileService } from '../../services/file.service';
-import * as Moment from 'moment'
+import * as Moment from 'moment';
 import { LocalStorageService } from 'ngx-webstorage';
 import { GlobalService } from '../../services/global.service';
 import swal from 'sweetalert2';

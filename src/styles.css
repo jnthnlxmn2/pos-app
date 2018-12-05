@@ -2,16 +2,3 @@
 
 @import '~bootstrap/dist/css/bootstrap.min.css';
 @import './assets/forms.css';
-.bg-app {
-    min-height: -webkit-fill-available;
-    background: #0b0e8c;
-    background-repeat: no-repeat;
-}
-img.logo {
-    height: 180px;
-    width: auto;
-}
-.logo-center {
-    text-align: center;
-    padding-bottom: 25px;
-}

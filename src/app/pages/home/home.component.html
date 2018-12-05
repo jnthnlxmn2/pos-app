@@ -1,19 +1,5 @@
 <div class="container">
-    <div class="logo-center"> 
-        <img src="../../../assets/LOGO.jpg" class="logo">
-      </div>
   <div class="file-category">
-    <div class="row" *ngIf="file_category.length>0">
-      <div style="cursor: pointer;" (click)="loadFiles()" class="col-md-4">
-        <div class="category">
-          <h5>All</h5>
-        </div>
-      </div>
-      <div *ngFor="let category of file_category" (click)="loadFiles(category)" style="cursor: pointer;" class="col-md-4">
-        <div class="category">
-          <h5>{{category.description}}</h5>
-        </div>
-      </div>
-    </div>
+    
   </div>
 </div>

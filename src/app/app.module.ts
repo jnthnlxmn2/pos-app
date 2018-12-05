@@ -24,6 +24,15 @@ import { ModalModule } from 'ngx-modal';
 import { RegisterComponent } from './pages/register/register.component';
 import { ChangePasswordComponent } from './pages/change-password/change-password.component';
 import { SearchpipePipe } from './pipes/searchpipe.pipe';
+import { ManufacturerComponent } from './pages/manufacturer/manufacturer.component';
+import { CustomerComponent } from './pages/customer/customer.component';
+import { ItemsComponent } from './pages/items/items.component';
+import { SubCategoryComponent } from './pages/sub-category/sub-category.component';
+import { UnitTypeComponent } from './pages/unit-type/unit-type.component';
+import { PurchaseComponent } from './pages/purchase/purchase.component';
+import { PurchaseListComponent } from './pages/purchase-list/purchase-list.component';
+import { LogsComponent } from './pages/logs/logs.component';
+import { RefillComponent } from './pages/refill/refill.component';
 
 @NgModule({
   declarations: [
@@ -39,10 +48,21 @@ import { SearchpipePipe } from './pipes/searchpipe.pipe';
     UsersComponent,
     RegisterComponent,
     ChangePasswordComponent,
-    SearchpipePipe
+    SearchpipePipe,
+    ManufacturerComponent,
+    CustomerComponent,
+    ItemsComponent,
+    SubCategoryComponent,
+    UnitTypeComponent,
+    PurchaseComponent,
+    PurchaseListComponent,
+    LogsComponent,
+    RefillComponent
 
   ],
   imports: [
+    ModalModule,
+    NgbModule,
     BrowserModule,
     AppRoutingModule,
     NgbModule,
@@ -54,7 +74,6 @@ import { SearchpipePipe } from './pipes/searchpipe.pipe';
     FormsModule,
     NgxSpinnerModule,
     NgxPaginationModule,
-    ModalModule,
     FileUploadModule
 
   ],

@@ -1,0 +1,76 @@
+<div class="container">
+  <div class="row add-category">
+    <div class="col-md-12">
+      <div class="input-group mb-3">
+        <div class="input-group-prepend">
+          <span class="input-group-text" id="basic-addon1">Full Name</span>
+        </div>
+        <input type="text" class="form-control" placeholder="" aria-label="" [(ngModel)]="fullname" aria-describedby="basic-addon1">
+      </div>
+      <div class="input-group mb-3">
+        <div class="input-group-prepend">
+          <span class="input-group-text" id="basic-addon1">Address</span>
+        </div>
+        <input type="text" class="form-control" placeholder="" aria-label="" [(ngModel)]="address" aria-describedby="basic-addon1">
+      </div>
+      <div class="input-group mb-3">
+        <div class="input-group-prepend">
+          <span class="input-group-text" id="basic-addon1">Phone</span>
+        </div>
+        <input type="text" class="form-control" placeholder="" aria-label="" [(ngModel)]="phone" aria-describedby="basic-addon1">
+      </div>
+
+
+    </div>
+    <div class="col-md-12">
+      <div class="btn-group" role="group" aria-label="Basic example">
+        <button type="button" *ngIf="update" (click)="Refill(id)" class="btn btn-success">Refill</button>
+      </div>
+    </div>
+  </div>
+
+  <table *ngIf="customers.length>0" class="table table-striped">
+    <thead>
+      <tr>
+        <th scope="col">Name</th>
+        <th scope="col">Address</th>
+        <th scope="col">Phone</th>
+        <th scope="col">Action</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let customer of customers | paginate: { itemsPerPage: 10, currentPage: p }">
+        <td>
+          {{customer.name}}
+        </td>
+        <td>
+          {{customer.address}}
+        </td>
+        <td>
+          {{customer.phone}}
+        </td>
+        <td>
+          <button type="button" (click)="toUpdate(customer)" class="btn btn-info">Edit</button>
+          <button type="button" (click)="deleteFile(customer.id)" class="btn btn-danger">Delete</button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+  <pagination-controls (pageChange)="p = $event"></pagination-controls>
+</div>
+<modal #myModal>
+  <modal-header>
+    <h3>Add customer</h3>
+  </modal-header>
+  <modal-content>
+
+  </modal-content>
+  <modal-footer>
+    <div class="btn-wrap division">
+      <button type="button" (click)="sendToAll(myModal)" class="btn btn-success btn-with-icon">
+        <i class="fa fa-check fa-fw"></i>Send</button>
+      <button type="button" (click)="closeModal(myModal)" class="btn btn-warning btn-with-icon">
+        <i class="fa fa-exclamation-triangle fa-fw"></i>Close</button>
+    </div>
+  </modal-footer>
+</modal>

@@ -21,7 +21,7 @@ export class FileService {
       })
     };
     return new Promise(resolve => {
-      this.http.get(this.api + "/api/me/file_category/", httpOptions)
+      this.http.get(this.api + "/api/admin/category/", httpOptions)
         .subscribe(response => {
           let data: any = response;
           if (data.data) {
@@ -46,7 +46,7 @@ export class FileService {
 
     return new Promise(resolve => {
       let api = this.globalservice.getAPI();
-      this.http.post(api + "/api/admin/file_category", params, httpOptions)
+      this.http.post(api + "/api/admin/category", params, httpOptions)
         .subscribe(data => {
           resolve(data);
         }, err => {
@@ -66,7 +66,26 @@ export class FileService {
 
     return new Promise(resolve => {
       let api = this.globalservice.getAPI();
-      this.http.delete(api + "/api/admin/file_category/" + id, httpOptions)
+      this.http.delete(api + "/api/admin/category/" + id, httpOptions)
+        .subscribe(data => {
+          resolve(data);
+        }, err => {
+          resolve(err);
+        });
+    });
+  }
+
+  updateFileCategory(id, params) {
+    let token = this.storage.retrieve('token');
+    const httpOptions = {
+      headers: new HttpHeaders({
+        'Authorization': 'Bearer ' + token,
+        'Content-Type': 'application/json'
+      })
+    };
+    return new Promise(resolve => {
+      let api = this.globalservice.getAPI();
+      this.http.put(api + "/api/admin/category/" + id, params, httpOptions)
         .subscribe(data => {
           resolve(data);
         }, err => {
@@ -96,24 +115,7 @@ export class FileService {
   }
 
 
-  updateFileCategory(id, params) {
-    let token = this.storage.retrieve('token');
-    const httpOptions = {
-      headers: new HttpHeaders({
-        'Authorization': 'Bearer ' + token,
-        'Content-Type': 'application/json'
-      })
-    };
-    return new Promise(resolve => {
-      let api = this.globalservice.getAPI();
-      this.http.put(api + "/api/admin/file_category/" + id, params, httpOptions)
-        .subscribe(data => {
-          resolve(data);
-        }, err => {
-          resolve(err);
-        });
-    });
-  }
+
 
   getFilesByCategory(id = 0) {
     let token = this.storage.retrieve('token');

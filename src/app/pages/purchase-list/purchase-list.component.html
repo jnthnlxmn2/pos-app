@@ -1,0 +1,93 @@
+<div class="container">
+  <div class="row add-category">
+  </div>
+  <div class="col-md-12">
+  </div>
+
+
+  <table *ngIf="purchases.length>0" class="table table-striped">
+    <thead>
+      <tr>
+        <th scope="col">Tracking Number</th>
+        <th scope="col">Date</th>
+        <th scope="col">Total Quantity</th>
+        <th scope="col">Total Amount</th>
+        <th scope="col">Tax</th>
+        <th scope="col">Status</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let purchase of purchases | paginate: { itemsPerPage: 10, currentPage: p }" (click)="viewDetails(content,purchase)"
+        style="cursor: pointer;">
+        <td>
+          {{purchase.tracking_number}}
+        </td>
+        <td>
+          {{showDate(purchase.created_at)}}
+        </td>
+        <td>
+          {{purchase.total_quantity}}
+        </td>
+        <td>
+          {{purchase.total_amount}}
+        </td>
+        <td>
+          {{purchase.tax}}
+        </td>
+        <td>
+          {{purchase.status}}
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+  <pagination-controls (pageChange)="p = $event"></pagination-controls>
+</div>
+
+<ng-template #content let-modal>
+  <div class="modal-header">
+    <h4 class="modal-title" id="modal-basic-title">Purchase Box</h4>
+    <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <form>
+      <div class="form-group">
+        <table class="table table-striped">
+          <thead>
+            <tr>
+              <th scope="col">Item</th>
+              <th scope="col">Price</th>
+              <th scope="col">Quantity</th>
+              <th scope="col">Total</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let box of purchase_box;let i = index">
+              <td>
+                {{box.product.name}}
+              </td>
+              <td>
+                {{box.amount}}
+              </td>
+              <td>
+                {{box.total_quantity}}
+              </td>
+              <td>
+                {{box.total_amount}}
+              </td>
+            </tr>
+          </tbody>
+        </table>
+        <div>
+          Total Quanity : {{purchase.total_quantity}}
+          <br> Grand Total : {{purchase.total_amount}}
+        </div>
+      </div>
+    </form>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-outline-dark" (click)="modal.close('Save click')">Close</button>
+  </div>
+</ng-template>

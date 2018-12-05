@@ -12,28 +12,29 @@ import { UserService } from '../services/user.service';
 export class HeaderComponent implements OnInit {
   collapsed = true;
   isMobile = false;
-  public paths = [{ name: 'Files', path: 'files' }, { name: 'Add file', path: 'add-file' }];
+  public paths = [{ name: 'Categories', path: 'categories', sub: [{ name: 'Sub Category', path: 'sub-category' }] }, { name: 'Manufacturer', path: 'manufacturer' },
+  { name: 'Items', path: 'items' }, { name: 'Refill', path: 'refill' }, { name: 'Logs', path: 'logs' }];
   constructor(public authservice: AuthService, public router: Router, public storage: LocalStorageService, public userservice: UserService) {
     this.userservice.getMe().then(response => {
       let data: any = response;
-      if (data.data) {
-        if (typeof window.orientation !== 'undefined') {
-          if (data.data.user_type_id == 1) {
-            this.paths = [{ name: 'Files', path: 'files' }, { name: 'Users', path: 'users' }];
-          } else {
-            this.paths = [{ name: 'Files', path: 'files' }];
-          }
-        }
-        else {
-
-          if (data.data.user_type_id == 1) {
-            this.paths = [{ name: 'Files', path: 'files' }, { name: 'Add file', path: 'add-file' }, { name: 'Categories', path: 'categories' }, { name: 'Register', path: 'register' }, { name: 'Users', path: 'users' }];
-          } else {
-            this.paths = [{ name: 'Files', path: 'files' }, { name: 'Add file', path: 'add-file' }];
-          }
-
-        }
-      }
+      /* if (data.data) {
+         if (typeof window.orientation !== 'undefined') {
+           if (data.data.user_type_id == 1) {
+             this.paths = [{ name: 'Files', path: 'files' }, { name: 'Add file', path: 'add-file' }, { name: 'Categories', path: 'categories' }, { name: 'Register', path: 'register' }, { name: 'Users', path: 'users' }];
+           } else {
+             this.paths = [{ name: 'Files', path: 'files' }];
+           }
+         }
+         else {
+ 
+           if (data.data.user_type_id == 1) {
+             this.paths = [{ name: 'Files', path: 'files' }, { name: 'Add file', path: 'add-file' }, { name: 'Categories', path: 'categories' }, { name: 'Register', path: 'register' }, { name: 'Users', path: 'users' }];
+           } else {
+             this.paths = [{ name: 'Files', path: 'files' }, { name: 'Add file', path: 'add-file' }];
+           }
+ 
+         }
+       }*/
     })
   }
 

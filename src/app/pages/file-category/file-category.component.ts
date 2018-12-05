@@ -36,7 +36,9 @@ export class FileCategoryComponent implements OnInit {
     this.spinner.show();
     let params = {
       name: this.category_name,
-      description: this.category_description
+      description: this.category_description,
+      created_by:1,
+      updated_by:1
     }
     this.fileservice.addFileCategory(params).then(response => {
       let data: any = response;

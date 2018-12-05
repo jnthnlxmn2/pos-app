@@ -1,0 +1,135 @@
+<div class="container">
+  <div class="row add-category">
+    <div class="col-md-12">
+      <div class="input-group mb-3">
+        <div class="input-group-prepend">
+          <span class="input-group-text" id="basic-addon1">Category</span>
+        </div>
+        <select class="custom-select" required (change)="selectSubCategory(objectItem.category_id)" [(ngModel)]="objectItem.category_id"
+          id="inputGroupSelect01">
+          <option value="">ALL</option>
+          <option *ngFor="let category of categories" value="{{category.id}}">{{category.name}}</option>
+        </select>
+      </div>
+      <div class="input-group mb-3" *ngIf="sub_categories.length>0">
+        <div class="input-group-prepend">
+          <span class="input-group-text" id="basic-addon1">Sub Category</span>
+        </div>
+        <select class="custom-select" required (change)="loadSubCategory(objectItem.sub_category_id)" [(ngModel)]="objectItem.sub_category_id"
+          id="inputGroupSelect01">
+          <option value="">ALL</option>
+          <option *ngFor="let sub_category of sub_categories" value="{{sub_category.id}}">{{sub_category.description}}</option>
+        </select>
+      </div>
+      <div class="input-group mb-3" *ngIf="update">
+        <div class="input-group-prepend">
+          <span class="input-group-text" id="basic-addon1">Item Code</span>
+        </div>
+        <input type="text" class="form-control" placeholder="" aria-label="" [(ngModel)]="objectItem.item_code" aria-describedby="basic-addon1">
+      </div>
+      <div class="input-group mb-3">
+        <div class="input-group-prepend">
+          <span class="input-group-text" id="basic-addon1">Name</span>
+        </div>
+        <input type="text" class="form-control" placeholder="" aria-label="" [(ngModel)]="objectItem.name" aria-describedby="basic-addon1">
+      </div>
+      <div class="input-group mb-3">
+        <div class="input-group-prepend">
+          <span class="input-group-text" id="basic-addon1">Description</span>
+        </div>
+        <input type="text" class="form-control" placeholder="" aria-label="" [(ngModel)]="objectItem.description" aria-describedby="basic-addon1">
+      </div>
+      <div class="input-group mb-3">
+        <div class="input-group-prepend">
+          <span class="input-group-text" id="basic-addon1">Manufacturer</span>
+        </div>
+        <select class="custom-select" required [(ngModel)]="objectItem.manufacturer_id" id="inputGroupSelect01">
+          <option *ngFor="let manufacturer of manufucturers" value="{{manufacturer.id}}">{{manufacturer.name}}</option>
+        </select>
+      </div>
+      <div class="input-group mb-3" *ngIf="!update">
+        <div class="input-group-prepend">
+          <span class="input-group-text" id="basic-addon1">Price</span>
+        </div>
+        <input type="text" class="form-control" placeholder="" aria-label="" [(ngModel)]="objectItem.price" aria-describedby="basic-addon1">
+      </div>
+      <div class="input-group mb-3" *ngIf="update && objectItem.total_stock == 0">
+        <div class=" input-group-prepend ">
+          <span class="input-group-text " id="basic-addon1 ">Price</span>
+        </div>
+        <input type="text " class="form-control " placeholder=" " aria-label=" " [(ngModel)]="objectItem.price
+        " aria-describedby="basic-addon1 ">
+      </div>
+    </div>
+    <div class="col-md-12 ">
+      <div class="btn-group " role="group " aria-label="Basic example ">
+        <button type="button " *ngIf="update " (click)="updateFile() " class="btn btn-success ">Update</button>
+        <button type="button " *ngIf="update " (click)="cancel() " class="btn btn-warning ">Cancel</button>
+        <button type="button " *ngIf="!update " (click)="addItem() " class="btn btn-success ">Add</button>
+        <button type="button " *ngIf="!update " (click)="clear() " class="btn btn-warning ">Clear</button>
+      </div>
+    </div>
+  </div>
+
+  <table *ngIf="items.length>0" class="table table-striped">
+    <thead>
+      <tr>
+        <th scope="col">Item Code</th>
+        <th scope="col">Name</th>
+        <th scope="col">Category</th>
+        <th scope="col">Description</th>
+        <th scope="col">Manufacturer</th>
+        <th scope="col">Price</th>
+        <th scope="col">Stock</th>
+        <th scope="col">Action</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let item of items | paginate: { itemsPerPage: 10, currentPage: p } ">
+        <td>
+          {{item.item_code}}
+        </td>
+        <td>
+          {{item.name}}
+        </td>
+        <td>
+          {{item.category_id}}
+        </td>
+        <td>
+          {{item.description}}
+        </td>
+        <td>
+          {{item.manufacturer_id}}
+        </td>
+        <td>
+          {{item.price}}
+        </td>
+        <td>
+          {{item.total_stock}}
+        </td>
+        <td>
+          <button type="button" (click)="toUpdate(item)" class="btn btn-info">Edit</button>
+          <button type="button" (click)="deleteItem(item.id)" class="btn btn-danger">Delete</button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+  <pagination-controls (pageChange)="p = $event"></pagination-controls>
+</div>
+<modal #myModal>
+  <modal-header>
+    <h3>Add customer</h3>
+  </modal-header>
+  <modal-content>
+
+  </modal-content>
+  <modal-footer>
+    <div class="btn-wrap division">
+      <button type="button" (click)="sendToAll(myModal)" class="btn btn-success btn-with-icon">
+        <i class="fa fa-check fa-fw"></i>Send</button>
+      <button type="button" (click)="closeModal(myModal)" class="btn btn-warning btn-with-icon">
+        <i class="fa fa-exclamation-triangle fa-fw"></i>Close</button>
+    </div>
+  </modal-footer>
+</modal>

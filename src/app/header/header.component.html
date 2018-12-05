@@ -1,17 +1,26 @@
-  <nav *ngIf="authservice.isLoggednIn()" id="mainNavbar" class="navbar navbar-expand-lg navbar-light bg-light">
-    <a class="navbar-brand" style="cursor: pointer;" (click)="navigate('')">File App</a>
-    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
-      aria-expanded="false" aria-label="Toggle navigation" (click)="toggleCollapsed()">
-      <span class="navbar-toggler-icon"></span>
-    </button>
-    <div id="navbarSupportedContent" [ngClass]="{'collapse': collapsed, 'navbar-collapse': true}">
-      <ul class="navbar-nav mr-auto">
-        <li *ngFor="let path of paths" class="nav-item">
-          <a style="cursor: pointer;" class="nav-link" (click)="navigate(path.path)">{{path.name}}
-            <span class="sr-only"></span>
-          </a>
-        </li>
-        <!--  <li class="nav-item dropdown">
+<nav *ngIf="authservice.isLoggednIn()" id="mainNavbar" class="navbar navbar-expand-lg navbar-light bg-light">
+  <a class="navbar-brand" style="cursor: pointer;" (click)="navigate('')">Inventory App</a>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
+    aria-expanded="false" aria-label="Toggle navigation" (click)="toggleCollapsed()">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+  <div id="navbarSupportedContent" [ngClass]="{'collapse': collapsed, 'navbar-collapse': true}">
+    <ul class="navbar-nav mr-auto">
+      <li *ngFor="let path of paths" class="nav-item">
+        <a *ngIf="path.sub" class="nav-link" style="cursor: pointer;" >
+          <div class="dropdown">
+            <a (click)="navigate(path.path)" class="dropbtn">{{path.name}}</a>
+            <div class="dropdown-content">
+              <a *ngFor="let subpath of path.sub" style="cursor: pointer;"  (click)="navigate(subpath.path)">{{subpath.name}}</a>
+            </div>
+          </div>
+        </a>
+        <a *ngIf="!path.sub" style="cursor: pointer;" class="nav-link" (click)="navigate(path.path)">{{path.name}}
+          <span class="sr-only"></span>
+        </a>
+
+      </li>
+      <!--  <li class="nav-item dropdown">
           <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
             Dropdown
           </a>
@@ -26,10 +35,10 @@
           <a class="nav-link disabled" href="#">Disabled</a>
         </li> -->
 
-      </ul>
-      <form class="form-inline my-2 my-lg-0">
-        <button class="btn btn-outline-info my-2 my-sm-0" (click)="changepassword()" type="submit">Change Password</button>
-        <button class="btn btn-outline-danger my-2 my-sm-0" (click)="logout()" type="submit">Logout</button>
-      </form>
-    </div>
-  </nav>
+    </ul>
+    <form class="form-inline my-2 my-lg-0">
+      <button class="btn btn-outline-info my-2 my-sm-0" (click)="changepassword()" type="submit">Change Password</button>
+      <button class="btn btn-outline-danger my-2 my-sm-0" (click)="logout()" type="submit">Logout</button>
+    </form>
+  </div>
+</nav>

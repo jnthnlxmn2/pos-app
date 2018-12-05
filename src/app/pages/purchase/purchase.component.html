@@ -1,0 +1,103 @@
+<div class="container">
+  <div class="row add-category">
+    <div class="col-md-12">
+      <div class="btn-group" role="group" aria-label="Basic example">
+      </div>
+    </div>
+  </div>
+
+  <table *ngIf="items.length>0" class="table table-striped">
+    <thead>
+      <tr>
+        <th scope="col">Name</th>
+        <th scope="col">Category</th>
+        <th scope="col">Description</th>
+        <th scope="col">Manufacturer</th>
+        <th scope="col">Price</th>
+        <th scope="col">Stock</th>
+        <th scope="col">Action</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let item of items | paginate: { itemsPerPage: 10, currentPage: p }">
+        <td>
+          {{item.name}}
+        </td>
+        <td>
+          {{item.category_id}}
+        </td>
+        <td>
+          {{item.description}}
+        </td>
+        <td>
+          {{item.manufacturer_id}}
+        </td>
+        <td>
+          {{item.price}}
+        </td>
+        <td>
+          {{item.total_stock}}
+        </td>
+        <td>
+          <button type="button" (click)="open(content,item)" class="btn btn-info">Add to Purchase</button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+  <pagination-controls (pageChange)="p = $event"></pagination-controls>
+</div>
+<div class="row">
+  <ng-template #content let-modal>
+    <div class="modal-header">
+      <h4 class="modal-title" id="modal-basic-title">Purchase Box</h4>
+      <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <div class="modal-body">
+      <form>
+        <div class="form-group">
+          <table class="table table-striped">
+            <thead>
+              <tr>
+                <th scope="col">Item</th>
+                <th scope="col">Price</th>
+                <th scope="col">Quantity</th>
+                <th scope="col">Total</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let box of purchase_box;let i = index">
+                <td>
+                  {{box.name}}
+                </td>
+                <td>
+                  {{box.price}}
+                </td>
+                <td>
+                  <input type="number" (change)="changeQuantity(box,purchase_box[i].quantity)" [(ngModel)]="purchase_box[i].quantity" [ngModelOptions]="{standalone: true}"
+                    min="1" max="{{box.total_stock}}" step="1" />
+                </td>
+                <td>
+                  {{box.total}}
+                </td>
+                <td>
+                  <button (click)="remove(box.id)" class="btn btn-danger">X</button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div>
+            Total Quanity : {{grand_quantity}}
+            <br> Grand Total : {{grand_total}}
+          </div>
+        </div>
+      </form>
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn btn-outline-dark" (click)="modal.close('Save click')">Add more items</button>
+      <button type="button" class="btn btn-outline-dark" (click)="modal.close('Save click');proceed()">Proceed</button>
+    </div>
+  </ng-template>
+</div>
