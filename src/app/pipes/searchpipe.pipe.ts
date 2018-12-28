@@ -10,6 +10,10 @@ export class SearchpipePipe implements PipeTransform {
     if (!value) return null;
     if (!args) return value;
 
+    console.log(value,"VALUE");
+    console.log(args,"ARGS");
+    
+
     args = args.toLowerCase();
 
     return value.filter(function (item) {

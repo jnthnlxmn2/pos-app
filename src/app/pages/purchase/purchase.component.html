@@ -1,4 +1,235 @@
-<div class="container">
+<div class="container-fluid">
+  <div class="row add-category">
+    <div class="col-md-8">
+      <div class="box">
+        <div class="input-group  mb-3">
+          <div class="input-group-prepend">
+            <span class="input-group-text" id="inputGroup-sizing-sm">Search</span>
+          </div>
+          <input type="text" [(ngModel)]="search" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm">
+        </div>
+        <ngb-tabset>
+          <ngb-tab>
+            <ng-template ngbTabTitle>
+              <div style="padding:10px;" (click)="selectSubCategory()">All</div>
+            </ng-template>
+            <ng-template ngbTabContent>
+              <p>
+                <table *ngIf="items.length>0" class="table table-striped">
+                  <thead>
+                    <tr>
+                      <th scope="col">Item Code</th>
+                      <th scope="col">Name</th>
+                      <th scope="col">Price</th>
+                      <th scope="col">Stock</th>
+                      <th scope="col">Action</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr *ngFor="let item of items | paginate: { itemsPerPage: 10, currentPage: p } | searchpipe:search">
+                      <td>
+                        {{item.item_code}}
+                      </td>
+                      <td>
+                        {{item.name}}
+                      </td>
+                      <td>
+                        {{item.sale_price}}
+                      </td>
+                      <td>
+                        {{item.total_item_stock_quantity}}
+                      </td>
+                      <td>
+                        <button type="button" *ngIf="item.total_item_stock_quantity!=0" (click)="open(content,item)" class="btn btn-info">Add to Purchase</button>
+                      </td>
+                    </tr>
+                  </tbody>
+                  <pagination-controls (pageChange)="p = $event"></pagination-controls>
+                </table>
+            </ng-template>
+          </ngb-tab>
+          <ngb-tab *ngFor="let category of categories">
+            <ng-template ngbTabTitle>
+              <div style="padding:10px;" (click)="selectSubCategory(category.id)">{{category.name}}</div>
+            </ng-template>
+            <ng-template ngbTabContent>
+              <p>
+                <table *ngIf="items.length>0" class="table table-striped">
+                  <thead>
+                    <tr>
+                      <th scope="col">Item Code</th>
+                      <th scope="col">Name</th>
+                      <th scope="col">Price</th>
+                      <th scope="col">Stock</th>
+                      <th scope="col">Action</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr *ngFor="let item of items | paginate: { itemsPerPage: 10, currentPage: p }">
+                      <td>
+                        {{item.item_code}}
+                      </td>
+                      <td>
+                        {{item.name}}
+                      </td>
+                      <td>
+                        {{item.sale_price}}
+                      </td>
+                      <td>
+                        {{item.total_item_stock_quantity}}
+                      </td>
+                      <td>
+                        <button type="button" *ngIf="item.total_item_stock_quantity!=0"  (click)="open(content,item)" class="btn btn-info">Add to Purchase</button>
+                      </td>
+                    </tr>
+                  </tbody>
+                  <pagination-controls (pageChange)="p = $event"></pagination-controls>
+                </table>
+            </ng-template>
+          </ngb-tab>
+        </ngb-tabset>
+      </div>
+    </div>
+    <div class="col-md-4">
+      <div class="box">
+        <div class="form-group">
+          <table class="table table-striped">
+            <thead>
+              <tr>
+                <th scope="col">Item</th>
+                <th scope="col">Price</th>
+                <th scope="col">Quantity</th>
+                <th scope="col">Total</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let box of purchase_box;let i = index">
+                <td>
+                  {{box.name}}
+                </td>
+                <td>
+                  {{box.sale_price}}
+                </td>
+                <td>
+                  <input type="number" (change)="changeQuantity(box,purchase_box[i].quantity)" [(ngModel)]="purchase_box[i].quantity" [ngModelOptions]="{standalone: true}"
+                    min="1" max="{{box.total_stock}}" step="1" />
+                </td>
+                <td>
+                  {{box.total_sale}}
+                </td>
+                <td>
+                  <button (click)="remove(box.id)" class="btn btn-danger">X</button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div>
+            Total Quanity : {{grand_quantity}}
+            <br> Grand Total : {{grand_total}}
+          </div>
+        </div>
+
+        <div class="input-group mb-3">
+          <div class="input-group-prepend">
+            <span class="input-group-text" id="basic-addon1">Amount</span>
+          </div>
+          <input type="number" class="form-control" placeholder="" aria-label="" [(ngModel)]="amount_paid" aria-describedby="basic-addon1">
+        </div>
+        <div class="input-group mb-3">
+          <div class="input-group-prepend">
+            <span class="input-group-text" id="basic-addon1">Discount Code</span>
+          </div>
+          <input type="text" class="form-control" placeholder="" aria-label="" [(ngModel)]="discount_code" aria-describedby="basic-addon1">
+        </div>
+        <button type="button" class="btn btn-outline-dark" (click)="proceed(receipt)">Proceed</button>
+      </div>
+    </div>
+  </div>
+</div>
+<ng-template #content let-modal>
+  <div class="modal-header">
+    <h4 class="modal-title" id="modal-basic-title">Quantity</h4>
+    <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <form>
+      Item : {{item.name}}
+      <br> Description : {{item.description}}
+      <br> Stock : {{item.total_item_stock_quantity}}
+
+      <div class="form-group">
+        <input type="number" [(ngModel)]="item.quantity" (change)="change(item.quantity)" [ngModelOptions]="{standalone: true}" value="0"
+          min="1" max="item.total_stock" step="1" />
+      </div>
+    </form>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-outline-dark" (click)="modal.close('Save click')">Cancel</button>
+    <button type="button" class="btn btn-outline-dark" (click)="modal.close('Save click');okay(item)">Proceed</button>
+  </div>
+</ng-template>
+
+
+
+<ng-template #receipt let-modal>
+  <div class="modal-header">
+    <h4 class="modal-title" id="modal-basic-title">Receipt</h4>
+    <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+
+    <h5>FUSEDTECH POS APP</h5>
+    <br>
+    <h6>Marikina City</h6>
+    <br>
+    <br>
+    <h6>Transaction Number : {{print.tracking_number}} </h6>
+    <br>
+    <h6>Date : {{print.created_at}} </h6>
+    <br>
+    <div *ngFor="let item of print.purchase_details">
+      <br>
+      <h6>{{item.total_quantity}} {{item.product.item_code}} @ {{item.product.sale_price}}</h6>
+      <br> {{item.product.name}}
+      <br>
+    </div>
+    <h6>No. of items : {{print.total_quantity}} </h6>
+    <br>
+    <h6>Amount Due : {{print.total_amount}} </h6>
+    <br>
+    <h3>Change -> {{print.change}}</h3>
+    <br>
+    <h6>Cash: {{print.amount_paid}}</h6>
+    <br>
+    <br>
+    <h6>Tax Info</h6>
+    <br>
+    <h6> Vatable: {{print.vatable}}</h6>
+    <br>
+    <h6> Vat: {{print.vat}}</h6>
+    <br>
+    <h6> Total Sales: {{print.total_amount}}</h6>
+    <br>
+    <h6>Discount Info</h6>
+    <br>
+    <h6> Discount Amount: {{print.discounted_amount}}</h6>
+    <br>
+    <h6> Total Amount: {{print.total_discounted_amount}}</h6>
+
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-outline-dark" (click)="modal.close('Save click')">Close</button>
+  </div>
+</ng-template>
+
+
+
+
+<!--<div class="container">
   <div class="row add-category">
     <div class="col-md-12">
       <div class="btn-group" role="group" aria-label="Basic example">
@@ -100,4 +331,4 @@
       <button type="button" class="btn btn-outline-dark" (click)="modal.close('Save click');proceed()">Proceed</button>
     </div>
   </ng-template>
-</div>
+</div> !-->

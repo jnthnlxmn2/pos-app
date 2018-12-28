@@ -1,0 +1,16 @@
+.range {
+    color: red;
+    height: 100%;
+    width: 100%;
+}
+
+.faded {
+    color: orange;
+    height: 100%;
+    width: 100%;
+}
+
+.datecenter {
+    text-align: center;
+    padding: 24px;
+}

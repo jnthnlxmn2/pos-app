@@ -12,8 +12,7 @@ import { UserService } from '../services/user.service';
 export class HeaderComponent implements OnInit {
   collapsed = true;
   isMobile = false;
-  public paths = [{ name: 'Categories', path: 'categories', sub: [{ name: 'Sub Category', path: 'sub-category' }] }, { name: 'Manufacturer', path: 'manufacturer' },
-  { name: 'Items', path: 'items' }, { name: 'Refill', path: 'refill' }, { name: 'Logs', path: 'logs' }];
+  public paths = [ { name: 'Purchase', path: 'purchase' },{ name: 'Purchase List', path: 'purchase-list' },{ name: 'Logs', path: 'logs' }];
   constructor(public authservice: AuthService, public router: Router, public storage: LocalStorageService, public userservice: UserService) {
     this.userservice.getMe().then(response => {
       let data: any = response;

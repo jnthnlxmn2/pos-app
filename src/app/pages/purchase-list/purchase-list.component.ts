@@ -5,6 +5,7 @@ import swal from 'sweetalert2';
 import { PurchaseService } from '../../services/purchase.service';
 import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
 import * as Moment from 'moment'
+import { NgbDate, NgbCalendar } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
   selector: 'app-purchase-list',
@@ -16,7 +17,17 @@ export class PurchaseListComponent implements OnInit {
   purchase_box = {};
   purchase = {};
   closeResult: string;
-  constructor(private spinner: NgxSpinnerService, public router: Router, private modalService: NgbModal, public purchaseservice: PurchaseService) { }
+
+  hoveredDate: NgbDate;
+
+  fromDate: NgbDate;
+  toDate: NgbDate;
+
+  range: any = [null, null];
+  constructor(private spinner: NgxSpinnerService, public router: Router, private modalService: NgbModal, public purchaseservice: PurchaseService, calendar: NgbCalendar) {
+    this.fromDate = calendar.getToday();
+    this.toDate = calendar.getToday();
+  }
 
   ngOnInit() {
     this.spinner.show();
@@ -26,6 +37,7 @@ export class PurchaseListComponent implements OnInit {
         this.spinner.hide();
         this.purchases = data.data.data;
         console.log(this.purchases, "Items")
+        this.onDateSelection();
       }
     })
   }
@@ -54,5 +66,45 @@ export class PurchaseListComponent implements OnInit {
       return `with: ${reason}`;
     }
   }
+
+
+  onDateSelection() {
+    console.log(this.fromDate, "FROMMMM");
+    console.log(this.toDate, "TOOOO");
+    if (this.fromDate != null && this.toDate != null) {
+      this.range = [new Date(this.fromDate.year, this.fromDate.month - 1, this.fromDate.day), new Date(this.toDate.year, this.toDate.month - 1, this.toDate.day)];
+    }
+    else if (this.fromDate == null && this.toDate == null) {
+      this.range = [new Date(this.fromDate.year, this.fromDate.month - 1, this.fromDate.day), null];
+    }
+    else {
+      this.range = [new Date(), null];
+    }
+    /* if (!this.fromDate && !this.toDate) {
+       this.fromDate = date;
+       this.range = [null, null];
+     } else if (this.fromDate && !this.toDate && date.after(this.fromDate)) {
+       this.toDate = date;
+       this.range = [new Date(this.fromDate.year, this.fromDate.month-1, this.fromDate.day), new Date(this.toDate.year, this.toDate.month-1, this.toDate.day)];
+     } else {
+       this.toDate = null;
+       this.fromDate = date;
+ 
+       this.range = [new Date(this.fromDate.year, this.fromDate.month-1, this.fromDate.day), null];
+     }*/
+  }
+
+  isHovered(date: NgbDate) {
+    return this.fromDate && !this.toDate && this.hoveredDate && date.after(this.fromDate) && date.before(this.hoveredDate);
+  }
+
+  isInside(date: NgbDate) {
+    return date.after(this.fromDate) && date.before(this.toDate);
+  }
+
+  isRange(date: NgbDate) {
+    return date.equals(this.fromDate) || date.equals(this.toDate) || this.isInside(date) || this.isHovered(date);
+  }
+
 
 }

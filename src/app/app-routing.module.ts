@@ -22,7 +22,7 @@ import { RefillComponent } from './pages/refill/refill.component';
 
 
 const routes: Routes = [
-  { path: '', component: ItemsComponent, canActivate: [AuthGuard] },
+  { path: '', component: PurchaseComponent, canActivate: [AuthGuard] },
   { path: 'login', component: LoginComponent },
   { path: 'files', component: FilesComponent, canActivate: [AuthGuard] },
   { path: 'add-file', component: AddFileComponent, canActivate: [AuthGuard] },

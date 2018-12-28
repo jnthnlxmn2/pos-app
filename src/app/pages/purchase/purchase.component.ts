@@ -4,6 +4,8 @@ import { NgxSpinnerService } from 'ngx-spinner';
 import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
 import swal from 'sweetalert2';
 import { PurchaseService } from '../../services/purchase.service';
+import { CategoryService } from '../../services/category.service';
+import { NGB_DATEPICKER_DATE_ADAPTER_FACTORY } from '@ng-bootstrap/ng-bootstrap/datepicker/adapters/ngb-date-adapter';
 
 @Component({
   selector: 'app-purchase',
@@ -12,25 +14,66 @@ import { PurchaseService } from '../../services/purchase.service';
 })
 export class PurchaseComponent implements OnInit {
   items: any = [];
+  item: any = {};
   closeResult: string;
   purchase_box: any = [];
   grand_total: any = 0;
   grand_quantity: any = 0;
-  constructor(public itemservice: ItemService, private spinner: NgxSpinnerService, private modalService: NgbModal, public purchaseservice: PurchaseService) { }
+  items_holder: any = [];
+  print: any = {};
+  amount_paid: any = 0;
+  discount_code: any = null;
+  categories: any = [];
+  constructor(public itemservice: ItemService,
+    private spinner: NgxSpinnerService,
+    private modalService: NgbModal,
+    public purchaseservice: PurchaseService,
+    public categoryservice: CategoryService) { }
 
   ngOnInit() {
     this.spinner.show();
-    this.itemservice.getItems().then(response => {
+    this.categoryservice.getFileCategory().then(response => {
       let data: any = response;
-      this.spinner.hide();
-      if (data.data) {
-        this.items = data.data.data;
-        console.log(this.items, "Items")
-      }
+      this.categories = data.data;
+      //   console.log(this.categories, "Categories")
+      this.itemservice.getItems().then(response => {
+        let data: any = response;
+        this.spinner.hide();
+        if (data.data) {
+          this.items = data.data.data;
+          this.items_holder = data.data.data;
+          //  console.log(this.items, "Items")
+        }
+      })
     })
   }
 
+
+  selectSubCategory(id) {
+    //console.log(id);
+    if (id) {
+      this.items = [];
+      this.items_holder.forEach(data => {
+        if (data.category_id == id) {
+          this.items.push(data);
+        }
+      });
+    } else {
+      this.items = this.items_holder;
+
+    }
+  }
+
   open(content, item) {
+    this.item = item;
+    this.modalService.open(content, { ariaLabelledBy: 'modal-basic-title', size: 'sm' }, ).result.then((result) => {
+      this.closeResult = `Closed with: ${result}`;
+    }, (reason) => {
+      this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
+    });
+  }
+
+  okay(item) {
     let bolean = true;
     for (let x = 0; x < this.purchase_box.length; x++) {
       if (this.purchase_box[x].id == item.id) {
@@ -40,17 +83,13 @@ export class PurchaseComponent implements OnInit {
     if (bolean) {
       let object: any = {};
       object = item;
-      object.quantity = 1;
+      object.quantity = item.quantity;
+      //1st object.total = object.quantity * object.price;
+      object.total_sale = object.quantity * object.sale_price
       object.total = object.quantity * object.price;
       this.purchase_box.push(object);
       this.compute();
-      console.log(this.purchase_box, "ITEM");
     }
-    this.modalService.open(content, { ariaLabelledBy: 'modal-basic-title', size: 'lg' }, ).result.then((result) => {
-      this.closeResult = `Closed with: ${result}`;
-    }, (reason) => {
-      this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
-    });
   }
 
   remove(id) {
@@ -62,12 +101,20 @@ export class PurchaseComponent implements OnInit {
     this.compute();
   }
 
+  change(quantity) {
+    if (quantity > this.item.total_item_stock_quantity) {
+      this.item.quantity = this.item.total_item_stock_quantity;
+    }
+  }
+
   changeQuantity(item, quantity) {
     if (quantity > item.total_stock) {
       for (let x = 0; x < this.purchase_box.length; x++) {
         if (this.purchase_box[x].id == item.id) {
           this.purchase_box[x].quantity = item.total_stock;
+          // 1st  this.purchase_box[x].total = this.purchase_box[x].quantity * this.purchase_box[x].price;
           this.purchase_box[x].total = this.purchase_box[x].quantity * this.purchase_box[x].price;
+          this.purchase_box[x].total_sale = this.purchase_box[x].quantity * this.purchase_box[x].sale_price;
           this.compute();
         }
       }
@@ -76,26 +123,28 @@ export class PurchaseComponent implements OnInit {
       for (let x = 0; x < this.purchase_box.length; x++) {
         if (this.purchase_box[x].id == item.id) {
           this.purchase_box[x].quantity = quantity;
+          //1st this.purchase_box[x].total = this.purchase_box[x].quantity * this.purchase_box[x].price;
           this.purchase_box[x].total = this.purchase_box[x].quantity * this.purchase_box[x].price;
+          this.purchase_box[x].total_sale = this.purchase_box[x].quantity * this.purchase_box[x].sale_price;
           this.compute();
         }
       }
     }
-    console.log(this.purchase_box)
+    // console.log(this.purchase_box)
   }
 
   compute() {
     let total = 0;
     let quantity = 0;
     this.purchase_box.forEach(box => {
-      total = total + box.total;
+      total = total + box.total_sale;
       quantity = quantity + box.quantity;
     });
     this.grand_total = total;
     this.grand_quantity = quantity;
   }
 
-  proceed() {
+  proceed(receipt) {
     swal({
       title: 'Are you sure?',
       text: "You won't be able to revert this!",
@@ -117,10 +166,13 @@ export class PurchaseComponent implements OnInit {
           object.customer_id = 1;
           object.per_unit_id = 1;
           object.amount = box.price;
+          object.sale_amount = box.sale_price;
+          object.total_sale = box.total_sale;
           items.push(object);
         });
-
-        this.purchaseservice.purchase(items).then(response => {
+        this.grand_total = 0;
+        this.grand_quantity = 0;
+        this.purchaseservice.purchase(items, this.discount_code, this.amount_paid).then(response => {
           let data: any = response;
           if (data.data) {
             if (data.data.error) {
@@ -129,19 +181,22 @@ export class PurchaseComponent implements OnInit {
                 title: data.data.error,
                 text: 'close',
               });
-              this.purchase_box = [];
-              this.ngOnInit();
-              this.spinner.hide();
+              this.compute()
             }
             else {
-              swal({
-                type: 'success',
-                title: 'Purchased!',
-                text: 'close',
-              });
+              //     console.log(data.data.tracking_number)
+              this.print = data.data;
               this.purchase_box = [];
+              this.amount_paid = 0;
+              this.discount_code = null;
               this.ngOnInit();
               this.spinner.hide();
+              //     console.log('receipt', this.print)
+              this.modalService.open(receipt, { ariaLabelledBy: 'modal-basic-title', size: 'lg' }, ).result.then((result) => {
+                this.closeResult = `Closed with: ${result}`;
+              }, (reason) => {
+                this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
+              });
             }
 
           } else {

@@ -13,12 +13,14 @@ export class PurchaseService {
   }
 
 
-  purchase(params) {
+  purchase(params, discount_code, amount_paid) {
     let message_ref = new Date();
 
     let object = {
       items: params,
-      code: message_ref.getTime()
+      code: message_ref.getTime(),
+      discount_code: discount_code ? discount_code : null,
+      amount_paid: amount_paid
     }
     let token = this.storage.retrieve('token');
     const httpOptions = {
@@ -63,7 +65,7 @@ export class PurchaseService {
 
 
 
- 
+
 
 
 

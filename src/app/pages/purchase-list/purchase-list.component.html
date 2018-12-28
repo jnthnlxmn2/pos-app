@@ -2,8 +2,39 @@
   <div class="row add-category">
   </div>
   <div class="col-md-12">
-  </div>
+    <div class="datecenter">
+      <!-- <ngb-datepicker #dp (select)="onDateSelection($event)" [displayMonths]="2" [dayTemplate]="t" outsideDays="hidden">
+      </ngb-datepicker>
 
+      <ng-template #t let-date let-focused="focused">
+        <span class="custom-day" [class.focused]="focused" [class.range]="isRange(date)" [class.faded]="isHovered(date) || isInside(date)"
+          (mouseenter)="hoveredDate = date" (mouseleave)="hoveredDate = null">
+          {{ date.day }}
+        </span>
+      </ng-template> -->
+      <form class="form-inline">
+        <div class="form-group">
+          <div class="input-group">
+            <input class="form-control" placeholder="yyyy-mm-dd" [(ngModel)]="fromDate" name="dp"  [displayMonths]="2"
+              [navigation]="navigation" [outsideDays]="outsideDays" [showWeekNumbers]="showWeekNumbers" ngbDatepicker #dt="ngbDatepicker">
+            <div class="input-group-append">
+              <button class="btn btn-outline-secondary calendar" (click)="dt.toggle()" type="button"></button>
+            </div>
+          </div>
+          <div class="input-group">
+            <input class="form-control" placeholder="yyyy-mm-dd" [(ngModel)]="toDate" name="dp"  [displayMonths]="2"
+              [navigation]="navigation" [outsideDays]="outsideDays" [showWeekNumbers]="showWeekNumbers" ngbDatepicker #d="ngbDatepicker">
+            <div class="input-group-append">
+              <button class="btn btn-outline-secondary calendar" (click)="d.toggle()" type="button"></button>
+            </div>
+          </div>
+          <div class="input-group">
+            <button class="btn btn-outline-secondary calendar" (click)="onDateSelection()" type="button">Search</button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
 
   <table *ngIf="purchases.length>0" class="table table-striped">
     <thead>
@@ -17,7 +48,7 @@
       </tr>
     </thead>
     <tbody>
-      <tr *ngFor="let purchase of purchases | paginate: { itemsPerPage: 10, currentPage: p }" (click)="viewDetails(content,purchase)"
+      <tr *ngFor="let purchase of purchases | paginate: { itemsPerPage: 10, currentPage: p } | rangeDate:range" (click)="viewDetails(content,purchase)"
         style="cursor: pointer;">
         <td>
           {{purchase.tracking_number}}
@@ -42,6 +73,9 @@
   </table>
 
   <pagination-controls (pageChange)="p = $event"></pagination-controls>
+
+
+
 </div>
 
 <ng-template #content let-modal>
